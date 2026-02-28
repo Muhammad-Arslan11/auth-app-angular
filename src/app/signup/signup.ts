@@ -5,27 +5,26 @@ import { CommonModule } from '@angular/common';
 import { SnackbarComponent } from "../utility/snackbar/snackbar";
 import { Observable } from 'rxjs';
 import { AuthResponse } from '../Models/AuthResponse';
-import { RouterLink } from "@angular/router";
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-signup',
   imports: [FormsModule, CommonModule, SnackbarComponent, RouterLink],
-  templateUrl: './login.html',
-  styleUrl: './login.css',
+  templateUrl: './signup.html',
+  styleUrl: './signup.css',
   standalone: true
 })
-export class Login {
+export class Signup {
   constructor(private authService: AuthService) { }
   isLoading: boolean = false;
   errorMessage: string = '';
   authObs!: Observable<AuthResponse>;
- 
 
   onFormSubmitHandler(form: NgForm) {
     const { email, password } = form.value;
     if (form.invalid) return;
 
-      this.authObs = this.authService.signin(email, password);
+      this.authObs = this.authService.signup(email, password);
       this.authObs.subscribe({
       next: (res) => {
         console.log(res);

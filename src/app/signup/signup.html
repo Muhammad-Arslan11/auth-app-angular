@@ -1,5 +1,6 @@
+
 <div class="app-login-form">
-    <h2>Login</h2>
+    <h2>Signup</h2>
     <app-snackbar *ngIf="errorMessage" [errorMessage]="errorMessage"></app-snackbar>
     <form #LoginForm="ngForm" (ngSubmit)="onFormSubmitHandler(LoginForm)">
         <div class="form-input">
@@ -10,9 +11,9 @@
             <label>Password</label>
             <input type="password" placeholder="Password" name="password" ngModel required>
         </div>           
-        <button type="submit" class="app-login-btn">Login</button>
-        <p>Do not have an accout yet? 
-            <button type="button" class="app-toggle-btn" routerLink="/signup">Register Here.</button>
+        <button type="submit" class="app-login-btn">Signup</button>
+        <p>Already have an accout?
+            <button type="button" class="app-toggle-btn" routerLink="/login">try login</button>
         </p>
     </form>
 </div>
