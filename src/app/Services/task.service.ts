@@ -16,7 +16,7 @@ export class TaskService{
     CreateTask(task: Task){
         const headers = new HttpHeaders({'my-header': 'hello-world'})
         this.http.post<{name: string}>(
-            'https://angularhttpclient-f1d30-default-rtdb.firebaseio.com/tasks.json', 
+            'https://angular-httpclient-6c7b0-default-rtdb.asia-southeast1.firebasedatabase.app/task.json', 
             task, {headers: headers}
             )
             .pipe(catchError((err) => {
@@ -31,7 +31,7 @@ export class TaskService{
     }
 
     DeleteTask(id: string | undefined){
-        this.http.delete('https://angularhttpclient-f1d30-default-rtdb.firebaseio.com/tasks/' +id+'.json')
+        this.http.delete('https://angular-httpclient-6c7b0-default-rtdb.asia-southeast1.firebasedatabase.app/task/' +id+'.json')
         .pipe(catchError((err) => {
             //Write the logic to log errors
             const errorObj = {statusCode: err.status, errorMessage: err.message, datetime: new Date()}
@@ -44,7 +44,7 @@ export class TaskService{
     }
 
     DeleteAllTasks(){
-        this.http.delete('https://angularhttpclient-f1d30-default-rtdb.firebaseio.com/tasks.json', {observe: 'events', responseType: 'json'})
+        this.http.delete('https://angular-httpclient-6c7b0-default-rtdb.asia-southeast1.firebasedatabase.app/task.json', {observe: 'events', responseType: 'json'})
         .pipe(tap((event) => {
             console.log(event);
             if(event.type === HttpEventType.Sent){

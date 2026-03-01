@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AuthService } from '../Services/auth-service.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SnackbarComponent } from "../utility/snackbar/snackbar";
 import { Observable } from 'rxjs';
 import { AuthResponse } from '../Models/AuthResponse';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-signup',
@@ -19,6 +19,7 @@ export class Signup {
   isLoading: boolean = false;
   errorMessage: string = '';
   authObs!: Observable<AuthResponse>;
+  router = inject(Router);
 
   onFormSubmitHandler(form: NgForm) {
     const { email, password } = form.value;
@@ -27,7 +28,10 @@ export class Signup {
       this.authObs = this.authService.signup(email, password);
       this.authObs.subscribe({
       next: (res) => {
+        if(res){
         console.log(res);
+        this.router.navigate(['/dashboard']);
+        }
       },
       error: (errMsg) => {
         // this.errorMessage = errMsg;

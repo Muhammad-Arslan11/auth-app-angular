@@ -1,11 +1,12 @@
 import { Component, OnInit, inject} from '@angular/core';
 import { NgClass, CommonModule} from '@angular/common';
 import { Task } from '../Models/Task';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { TaskService } from '../Services/task.service';
 import { Subscription } from 'rxjs';
 import { CreateTaskComponent } from './create-task/create-task.component';
 import { TaskDetailsComponent } from './task-details/task-details.component';
+import { AuthService } from '../Services/auth-service.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,17 +22,14 @@ export class DashboardComponent implements OnInit{
   allTasks: Task[] = [];
   taskService: TaskService = inject(TaskService);
   currentTaskId: string | undefined = '';
-  isLoading: boolean = false;
-
   currentTask: Task | null | any = null;
-
   errorMessage: string | null = null;
-
   editMode: boolean = false;
   selectedTask!: Task | undefined;
-
   errorSub!: Subscription
+  isLoading:boolean = false;
 
+   constructor(private authService: AuthService){}
   ngOnInit(){
     this.fetchAllTasks();
     this.errorSub = this.taskService.errorSubject.subscribe({next: (httpError) => {
@@ -71,23 +69,24 @@ export class DashboardComponent implements OnInit{
       this.taskService.UpdateTask(this.currentTaskId, data);
   }
 
-  /*{
-    key1: {},
-    key2: {}
-  }*/
-
   FetchAllTaskClicked(){
     this.fetchAllTasks()
   }
 
   private fetchAllTasks(){
+    this.authService.user.subscribe((res)=>{
+      console.log(res);
+    })
     this.isLoading = true;
     this.taskService.GetAlltasks().subscribe({next: (tasks) => {
-      this.allTasks = tasks;
+      if(tasks){
+        this.allTasks = tasks;
+        console.log(this.allTasks)
+      }
       this.isLoading = false;
     }, error: (error) => {
-      this.setErrorMessage(error);
       this.isLoading = false;
+      this.setErrorMessage(error);
     }})
   }
 
