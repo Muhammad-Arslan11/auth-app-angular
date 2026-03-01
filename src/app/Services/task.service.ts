@@ -71,7 +71,7 @@ export class TaskService{
         queryParams = queryParams.set('item', 10)
 
         return this.http.get<{[key: string]: Task}>(
-            'https://angularhttpclient-f1d30-default-rtdb.firebaseio.com/tasks.json'
+            'https://angular-httpclient-6c7b0-default-rtdb.asia-southeast1.firebasedatabase.app/task.json'
             ,{headers: headers, params: queryParams, observe: 'body'}
             ).pipe(map((response) => {
                  //TRANSFORM DATA
@@ -93,7 +93,7 @@ export class TaskService{
     }
 
     UpdateTask(id: string | undefined, data: Task){
-        this.http.put('https://angularhttpclient-f1d30-default-rtdb.firebaseio.com/tasks/'+id+'.json', data)
+        this.http.put('https://angular-httpclient-6c7b0-default-rtdb.asia-southeast1.firebasedatabase.app/task/'+id+'.json', data)
         .pipe(catchError((err) => {
             //Write the logic to log errors
             const errorObj = {statusCode: err.status, errorMessage: err.message, datetime: new Date()}
@@ -106,7 +106,7 @@ export class TaskService{
     }
 
     getTaskDetails(id: string | undefined){
-        return this.http.get<Task>('https://angularhttpclient-f1d30-default-rtdb.firebaseio.com/tasks/'+id+'.json')
+        return this.http.get<Task>('https://angular-httpclient-6c7b0-default-rtdb.asia-southeast1.firebasedatabase.app/task/'+id+'.json')
         .pipe(map((response) => {
             console.log(response)
             let task: Task;
