@@ -30,7 +30,7 @@ export class Login {
       this.authObs.subscribe({
       next: (res) => {
         if(res){
-        console.log(res);
+        // console.log(res);
         this.router.navigate(['/dashboard']);
         }
       },

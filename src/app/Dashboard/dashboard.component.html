@@ -29,15 +29,15 @@
     <div class="dashboard-item-container">
         <div class="sb sb-error" *ngIf="errorMessage">{{ errorMessage }}</div>
          <!-- Loading State -->
-        <div style="text-align: center;" *ngIf="isLoading">
+        <!-- <div style="text-align: center;" *ngIf="isLoading">
             <h2>Loading Tasks...</h2>
-        </div>
+        </div> -->
         <!-- Empty State -->
         <div style="text-align: center;" *ngIf="!isLoading && allTasks.length === 0">
             <h2>No task has been created yet!</h2>
         </div>
          <!-- Data State -->
-        <ng-container *ngIf="!isLoading && allTasks.length !== 0">
+        <ng-container *ngIf="allTasks.length !== 0">
             <div class="task-item" [ngClass]="'task-' + task.status" *ngFor="let task of allTasks">
                 <div class="task-title">
                     <h3>{{ task.title }}</h3>
@@ -45,15 +45,15 @@
                 <p><b>Assigned to: </b>{{ task.assignedTo }}</p>
                 <p><b>Priority: </b>{{ task.priority }}</p>
                 <p><b>Status: </b>{{ task.status }}</p>
-                <div class="task-action-icons">
+               <div class="task-action-icons">
                     <button class="task-action-btn" title="Detail" (click)="showCurrentTaskDetails(task.id)">
-                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                       <i class="fa-solid fa-circle-info"></i>
                     </button>
                     <button class="task-action-btn" title="Edit" (click)="OnEditTaskClicked(task.id)">
-                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                       <i class="fa-solid fa-pen-to-square"></i>
                     </button>
                     <button class="task-action-btn" title="Delete" (click)="DeleteTask(task.id)">
-                        <i class="fa fa-trash" aria-hidden="true"></i>
+                        <i class="fa-solid fa-trash"></i>
                     </button>            
                 </div>
             </div>

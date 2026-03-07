@@ -79,6 +79,7 @@ export class DashboardComponent implements OnInit{
     })
     this.isLoading = true;
     this.taskService.GetAlltasks().subscribe({next: (tasks) => {
+      console.log(tasks)
       if(tasks){
         this.allTasks = tasks;
         console.log(this.allTasks)

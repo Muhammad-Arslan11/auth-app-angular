@@ -9,6 +9,6 @@
         <a routerLink="/">HOME</a>
         <a routerLink="/dashboard" *ngIf="isLoggedIn">DASHBOARD</a>
         <a routerLink="/login" *ngIf="!isLoggedIn">LOGIN</a>
-        <a *ngIf="isLoggedIn">LOGOUT</a>
+        <a *ngIf="isLoggedIn" (click)="onLogout()">LOGOUT</a>
     </div>
 </div>

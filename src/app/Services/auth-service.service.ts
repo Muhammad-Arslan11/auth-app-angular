@@ -1,15 +1,18 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { AuthResponse } from "../Models/AuthResponse";
-import { catchError, Subject, tap, throwError } from "rxjs";
+import { BehaviorSubject, catchError, Subject, tap, throwError } from "rxjs";
 import { User } from "../Models/User";
+import { Router } from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   http: HttpClient = inject(HttpClient);
-  user = new Subject<User>();
+  router: Router = inject(Router);
+  user = new BehaviorSubject<User | null>(null);
+  private timer:undefined | number = undefined;
 
   signup(email: string, password: string) {
     const data = { email: email, password: password, returnSecureToken: true }
@@ -25,6 +28,38 @@ export class AuthService {
       .pipe(catchError(this.handleError), tap((res)=>{
         this.handleCreateUser(res);
       }))
+  }
+
+  signout(){
+    this.user.next(null);
+    this.router.navigate(['/login']);
+    localStorage.removeItem('user');
+    if(this.timer){
+      clearTimeout(this.timer);
+      this.timer = undefined;
+    }
+  }
+
+  autoLogin(){
+    const user = localStorage.getItem('user');
+    if(!user){
+      return;
+    }
+    const parsedUser = JSON.parse(user);
+    const loggedInUser = new User(parsedUser.email, parsedUser.id, parsedUser._token, parsedUser._expiresIn);
+    if(loggedInUser.token){
+      this.user.next(loggedInUser);
+      const timerValue = parsedUser._expiresIn - new Date().getTime();
+      this.autoLogout(timerValue);
+      return;
+    }
+  }
+
+  autoLogout(expireTimer: number){
+   this.timer = setTimeout(() => {
+      this.signout();
+    }, expireTimer);
+    localStorage.removeItem('user');
   }
 
   private handleError(err: { error: { error: { message: any; }; }; }) {
@@ -62,5 +97,7 @@ export class AuthService {
       const expiresIn = new Date(expiresInTimeStamps);
       const user = new User(res.idToken, expiresIn, res.email, res.localId);
       this.user.next(user);
+      this.autoLogout(Number(res.expiresIn) * 1000);
+      localStorage.setItem('user', JSON.stringify(user));
    }
 }

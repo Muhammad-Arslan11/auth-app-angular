@@ -1,9 +1,10 @@
 import { Injectable, inject } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams, HttpEventType } from '@angular/common/http';
 import { Task } from "../Models/Task";
-import { map, catchError, tap } from 'rxjs/operators';
+import { map, catchError, tap, take, exhaustMap } from 'rxjs/operators';
 import { Subject, throwError } from 'rxjs';
 import { LoggingService } from "./Logging.service";
+import { AuthService } from "./auth-service.service";
 
 @Injectable({
     providedIn: 'root'
@@ -11,6 +12,7 @@ import { LoggingService } from "./Logging.service";
 export class TaskService{
     http: HttpClient = inject(HttpClient);
     loggingService: LoggingService = inject(LoggingService);
+    authService:AuthService = inject(AuthService);
     errorSubject = new Subject<HttpErrorResponse>();
 
     CreateTask(task: Task){
@@ -70,7 +72,7 @@ export class TaskService{
         queryParams = queryParams.set('page', 2);
         queryParams = queryParams.set('item', 10)
 
-        return this.http.get<{[key: string]: Task}>(
+           return this.http.get<{[key: string]: Task}>(
             'https://angular-httpclient-6c7b0-default-rtdb.asia-southeast1.firebasedatabase.app/task.json'
             ,{headers: headers, params: queryParams, observe: 'body'}
             ).pipe(map((response) => {
